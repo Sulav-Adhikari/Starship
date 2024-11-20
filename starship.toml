@@ -1,0 +1,236 @@
+format = """\
+$os \
+$container\
+$kubernetes\
+$memory_usage\
+$custom\
+$battery\
+$time\
+\n$directory\
+$git_branch\
+$git_status\
+$git_metrics\
+$aws\
+$docker_context\
+$terraform\
+$nodejs\
+$python\
+$rust\
+$golang\
+$ruby\
+$java\
+$php\
+$cmd_duration\
+$battery\
+$status\
+$line_break\
+$character\
+"""
+
+# System indicators
+[os]
+format = "[$symbol]($style)"
+style = "#E95420"
+disabled = false
+
+[os.symbols]
+Amazon = " "
+Android = " "
+Arch = " "
+Artix = " "
+CentOS = " "
+Debian = " "
+Fedora = " "
+Illumos = "󰈸 "
+Kali = " "
+Linux = " "
+Macos = " "
+NixOS = " "
+Pop = " "
+Raspbian = " "
+Redhat = " "
+RedHatEnterprise = " "
+RockyLinux = " "
+Redox = "󰀘 "
+Solus = "󰠳 "
+SUSE = " "
+Ubuntu = " "
+Unknown = " "
+Void = " "
+Windows = "󰍲 "
+
+[username]
+style_user = "bold white"
+style_root = "bold red"
+format = "[$user]($style)"
+disabled = false
+show_always = true
+
+[hostname]
+ssh_only = false
+format = " [$hostname](bold white) "
+disabled = false
+
+[directory]
+read_only = " 󰌾"
+home_symbol = "~"
+truncation_length = 3
+truncate_to_repo = true
+style = "bold purple"
+format = "[$path]($style)[$read_only]($read_only_style) "
+
+# Container and cloud
+[container]
+symbol = " "
+style = "bold red dimmed"
+format = '[$symbol]($style)'
+
+[kubernetes]
+symbol = "☸ "
+format = '[$symbol$context(\($namespace\))]($style)'
+style = "#326CE5"
+disabled = false
+
+[docker_context]
+symbol = " "
+format = "via [$symbol$context]($style) "
+style = "blue bold"
+only_with_files = true
+
+[terraform]
+symbol = "󱁢 "
+format = "via [$symbol$workspace]($style) "
+style = "bold 105"
+
+[aws]
+symbol = " "
+format = '[$symbol($region)]($style) '
+style = "#FF9900"
+
+# Development environments
+[nodejs]
+symbol = " "
+format = "[$symbol($version )]($style)"
+style = "bold green"
+
+[python]
+symbol = " "
+format = '[${symbol}(${version} )(\($virtualenv\) )]($style)'
+style = "bold green"
+pyenv_version_name = true
+pyenv_prefix = "pyenv "
+
+[rust]
+symbol = "󱘗 "
+format = "[$symbol($version )]($style)"
+style = "bold red"
+
+[golang]
+symbol = "󰟓 "
+format = "[$symbol($version )]($style)"
+style = "bold cyan"
+
+[ruby]
+symbol = " "
+format = "[$symbol($version )]($style)"
+style = "bold red"
+
+[java]
+symbol = " "
+format = "[$symbol($version )]($style)"
+style = "bold red"
+
+[php]
+symbol = " "
+format = "[$symbol($version )]($style)"
+style = "bold purple"
+
+# Git information
+[git_branch]
+symbol = " "
+format = "[$symbol$branch(:$remote_branch)]($style) "
+style = "white"
+
+[git_status]
+format = '([\[$all_status$ahead_behind\]]($style) )'
+conflicted = "="
+ahead = "⇡${count}"
+behind = "⇣${count}"
+diverged = "⇕⇡${ahead_count}⇣${behind_count}"
+untracked = "?${count}"
+stashed = "*${count}"
+modified = "!${count}"
+staged = "+${count}"
+renamed = "»${count}"
+deleted = "✘${count}"
+style = "bold yellow"
+
+[git_metrics]
+added_style = "bold green"
+deleted_style = "bold red"
+format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
+disabled = false
+
+# System metrics
+[memory_usage]
+symbol = " 󰍛 "
+format = "[$symbol mem:${ram_pct}]($style) "
+style = "bold dimmed green"
+threshold = 0
+disabled = false
+
+[battery]
+full_symbol = "󰁹 "
+charging_symbol = "󰂄 "
+discharging_symbol = "󰂃 "
+unknown_symbol = "󰂑 "
+empty_symbol = "󰂎 "
+format = "[$symbol$percentage]($style) "
+disabled = false
+
+[cmd_duration]
+format = "took [$duration]($style) "
+style = "yellow"
+min_time = 2000
+
+[time]
+disabled = false
+format = ' [$time]($style) '
+style = "bold red"
+time_format = "%R"
+
+[status]
+symbol = "✗"
+not_executable_symbol = "🚫"
+not_found_symbol = "🔍"
+sigint_symbol = "🧱"
+signal_symbol = "⚡"
+format = "[$symbol$status]($style) "
+map_symbol = true
+disabled = false
+
+[character]
+success_symbol = "[❯](bold green)"
+error_symbol = "[❯](bold red)"
+vimcmd_symbol = "[❮](bold green)"
+vimcmd_visual_symbol = "[❮](bold yellow)"
+vimcmd_replace_symbol = "[❮](bold purple)"
+vimcmd_replace_one_symbol = "[❮](bold purple)"
+
+[line_break]
+disabled = false
+
+#[custom.cpu]
+#command = """
+#cpu_usage=$(top -bn1 | sed -n '3p' | awk '{print 100 - $8}')
+#"""
+#format = "CPU: [$output%]($style)"
+#style = "bold yellow"
+#when = "true"
+
+[custom.cpu]
+command = "top -bn1 | sed -n '3p' | awk '{print 100 - $8}'"
+format = "[cpu:$symbol$output%]($style)"
+style = "yellow"
+when = "true"
+#symbol = "󰍛 "
